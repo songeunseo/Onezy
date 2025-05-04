@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Onezy",
+  "version": "1.0.0",
+  "description": "theonder에서 사무실 공간을 자동으로 예약합니다",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "images/space_favicon.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "notifications",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://space.theoneder.land/*",
+    "https://space-back-customer.theoneder.land/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://space.theoneder.land/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["images/*", "popup.css"],
+      "matches": ["https://space.theoneder.land/*"]
+    }
+  ],
+  "icons": {
+    "16": "images/space_favicon.png",
+    "48": "images/space_favicon.png",
+    "128": "images/space_favicon.png"
+  }
+} 
