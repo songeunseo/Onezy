@@ -161,15 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const month = now.getMonth() + 1;
         currentMonthElement.textContent = `${year}년 ${month}월`;
       }
-      
-      // 마지막 업데이트 시간 표시 (있는 경우)
-      if (data.lastUpdated && loadingElement) {
-        const lastUpdate = new Date(data.lastUpdated);
-        const hours = lastUpdate.getHours().toString().padStart(2, '0');
-        const minutes = lastUpdate.getMinutes().toString().padStart(2, '0');
-        loadingElement.textContent = `마지막 업데이트: ${hours}:${minutes}`;
-        loadingElement.style.display = 'block';
-      }
     }
 
     // 메인 화면 버튼 이벤트
@@ -248,12 +239,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 페이지 이동 함수
     function navigateToPage(url, action, options = {}) {
-      // 현재 활성화된 탭에서 페이지 이동
+      // 현재 활성화된 탭에서 페이지 이동 (activeTab 권한으로 작동)
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         const currentTab = tabs[0];
         
         // 현재 탭이 이미 해당 페이지인지 확인
-        if (currentTab.url.includes(url)) {
+        if (currentTab.url && currentTab.url.includes(url)) {
           // 이미 해당 페이지에 있으면 스크립트 실행
           if (url.includes('booking')) {
             chrome.tabs.sendMessage(currentTab.id, { 
@@ -270,25 +261,26 @@ document.addEventListener('DOMContentLoaded', function() {
             });
           }
         } else {
-          // 다른 페이지에 있으면 해당 페이지로 이동
-          chrome.tabs.update(currentTab.id, { url: url }, function() {
+          // 다른 페이지에 있으면 해당 페이지로 이동 (activeTab으로 현재 탭만 업데이트 가능)
+          chrome.tabs.update({url: url}, function() {
             // 페이지 로드 완료 후 스크립트 실행
             chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo, tab) {
-              if (tabId === currentTab.id && changeInfo.status === 'complete' && tab.url.includes(url)) {
+              // activeTab은 현재 활성화된 탭만 조작 가능하므로 ID 비교는 불필요함
+              if (changeInfo.status === 'complete' && tab.url.includes(url)) {
                 // 리스너 제거
                 chrome.tabs.onUpdated.removeListener(listener);
                 
                 // 페이지 로드 완료 후 스크립트 실행
                 setTimeout(() => {
                   if (url.includes('booking')) {
-                    chrome.tabs.sendMessage(tabId, { 
+                    chrome.tabs.sendMessage(tab.id, { 
                       action: 'startReservation',
                       options: options 
                     }, function(response) { 
                       console.log('예약 응답:', response); 
                     });
                   } else if (url.includes('my_page')) {
-                    chrome.tabs.sendMessage(tabId, { 
+                    chrome.tabs.sendMessage(tab.id, { 
                       action: 'cancelReservation'
                     }, function(response) { 
                       console.log('취소 응답:', response); 
@@ -314,6 +306,15 @@ document.addEventListener('DOMContentLoaded', function() {
         messageElement.textContent = '';
         messageElement.style.display = 'none';
       }, 10000);
+    }
+
+    // 스페이스케어 링크 처리
+    const spaceLinkCard = document.getElementById('space-link-card');
+    if (spaceLinkCard) {
+      spaceLinkCard.addEventListener('click', function() {
+        // activeTab 권한으로도 chrome.tabs.create는 사용 가능합니다
+        chrome.tabs.create({ url: 'https://space.theoneder.land/konkuk/main' });
+      });
     }
   } catch (error) {
     console.error('팝업 초기화 중 오류 발생:', error);

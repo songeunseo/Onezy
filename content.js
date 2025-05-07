@@ -20,32 +20,30 @@ if (window.location.href.includes('theoneder.land/konkuk/booking')) {
 
 // API에서 출석 데이터 가져오는 함수
 function fetchAttendanceData() {
-  fetch('https://space-back-customer.theoneder.land/customer/api/konkuk/companies/144', {
+  fetch('https://space-back-customer.theoneder.land/customer/api/konkuk/kt_attendance/get_my_company', {
     method: 'GET',
     credentials: 'include' // 중요! - 쿠키 포함
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`API 오류: ${response.status}`);
-    }
-    return response.json();
-  })
+  .then(response => response.json())
   .then(data => {
-    console.log('출석 데이터 가져오기 성공:', data);
+    console.log('출석일수 데이터:', data);
+    // 문자열을 숫자로 변환
+    const attendanceCount = parseInt(data, 10) || 0;
+    console.log('변환된 출석일수:', attendanceCount);
     
-    // 데이터가 있고 credit 필드가 있으면 백그라운드로 전송
-    if (data && typeof data.credit !== 'undefined') {
-      chrome.runtime.sendMessage({
-        action: 'updateAttendance',
-        data: {
-          credit: data.credit,
-          companyInfo: data
-        }
-      });
-    }
+    // popup.js로 데이터 전송
+    chrome.runtime.sendMessage({
+      action: 'updateAttendance',
+      data: {
+        credit: attendanceCount,
+        lastUpdated: new Date().toISOString()
+      }
+    }, function(response) {
+      console.log('출석일수 데이터 전송 완료:', response);
+    });
   })
   .catch(error => {
-    console.error('출석 데이터 가져오기 실패:', error);
+    console.error('출석일수 조회 실패:', error);
   });
 }
 
@@ -222,21 +220,13 @@ function executeReservationCode(options = {}) {
 
       console.log('🎉 예약 작업 종료! 총 예약 수: ' + totalReserved);
       
-      // 성공 메시지 전송
-      chrome.runtime.sendMessage({
-        action: 'reservationComplete',
-        success: true,
-        message: `총 ${totalReserved}일 예약 완료!`
-      });
+      // 작업 완료 로그만 남기고 메시지 전송은 제거
+      console.log(`총 ${totalReserved}일 예약 완료!`);
     } catch (error) {
       console.error('예약 과정에서 오류 발생:', error);
       
-      // 오류 메시지 전송
-      chrome.runtime.sendMessage({
-        action: 'reservationComplete',
-        success: false,
-        message: `오류 발생: ${error.message}`
-      });
+      // 오류 로그만 남기고 메시지 전송은 제거
+      console.error(`오류 발생: ${error.message}`);
     }
   })();
 }
@@ -284,21 +274,13 @@ function executeCancelationCode() {
     
       console.log('🎉 전체 예약 취소 완료! 총 ' + cancelCount + '개 취소됨');
       
-      // 성공 메시지 전송
-      chrome.runtime.sendMessage({
-        action: 'reservationComplete',
-        success: true,
-        message: `총 ${cancelCount}개 예약 취소 완료!`
-      });
+      // 작업 완료 로그만 남기고 메시지 전송은 제거
+      console.log(`총 ${cancelCount}개 예약 취소 완료!`);
     } catch (error) {
       console.error('취소 과정에서 오류 발생:', error);
       
-      // 오류 메시지 전송
-      chrome.runtime.sendMessage({
-        action: 'reservationComplete',
-        success: false,
-        message: `오류 발생: ${error.message}`
-      });
+      // 오류 로그만 남기고 메시지 전송은 제거  
+      console.error(`오류 발생: ${error.message}`);
     }
   })();
 }

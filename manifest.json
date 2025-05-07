@@ -9,10 +9,7 @@
   },
   "permissions": [
     "storage",
-    "activeTab",
-    "scripting",
-    "notifications",
-    "tabs"
+    "activeTab"
   ],
   "host_permissions": [
     "https://space.theoneder.land/*",
