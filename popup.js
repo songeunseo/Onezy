@@ -161,14 +161,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const month = now.getMonth() + 1;
         currentMonthElement.textContent = `${year}년 ${month}월`;
       }
-      
+
       // 마지막 업데이트 시간 표시 (있는 경우)
-      if (data.lastUpdated && loadingElement) {
+      if (data.lastUpdated) {
         const lastUpdate = new Date(data.lastUpdated);
+        const year = lastUpdate.getFullYear();
+        const month = (lastUpdate.getMonth() + 1).toString().padStart(2, '0');
+        const day = lastUpdate.getDate().toString().padStart(2, '0');
         const hours = lastUpdate.getHours().toString().padStart(2, '0');
         const minutes = lastUpdate.getMinutes().toString().padStart(2, '0');
-        loadingElement.textContent = `마지막 업데이트: ${hours}:${minutes}`;
-        loadingElement.style.display = 'block';
+        
+        // 마지막 업데이트 시간 표시
+        const updateInfo = document.querySelector('.update-info');
+        if (updateInfo) {
+          updateInfo.textContent = ` (마지막 업데이트: ${year}.${month}.${day} ${hours}:${minutes})`;
+        }
       }
     }
 

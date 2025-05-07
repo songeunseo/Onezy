@@ -20,7 +20,7 @@ if (window.location.href.includes('theoneder.land/konkuk/booking')) {
 
 // API에서 출석 데이터 가져오는 함수
 function fetchAttendanceData() {
-  fetch('https://space-back-customer.theoneder.land/customer/api/konkuk/companies/144', {
+  fetch('https://space-back-customer.theoneder.land/customer/api/konkuk/kt_attendance/get_my_company', {
     method: 'GET',
     credentials: 'include' // 중요! - 쿠키 포함
   })
@@ -33,12 +33,12 @@ function fetchAttendanceData() {
   .then(data => {
     console.log('출석 데이터 가져오기 성공:', data);
     
-    // 데이터가 있고 credit 필드가 있으면 백그라운드로 전송
-    if (data && typeof data.credit !== 'undefined') {
+    // 데이터가 있으면 백그라운드로 전송
+    if (data) {
       chrome.runtime.sendMessage({
         action: 'updateAttendance',
         data: {
-          credit: data.credit,
+          credit: data,
           companyInfo: data
         }
       });

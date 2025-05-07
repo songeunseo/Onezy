@@ -245,4 +245,10 @@ input[type="number"]::-webkit-outer-spin-button {
   text-align: center;
   color: #888;
   font-style: italic;
+}
+.update-info {
+  margin-left: 8px;
+  font-size: 0.7em;
+  color: #666;
+  font-weight: normal;
 } 
