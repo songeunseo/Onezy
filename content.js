@@ -11,11 +11,6 @@ if (window.location.href.includes('theoneder.land/konkuk/booking')) {
   setTimeout(() => {
     executeReservationCode();
   }, 3000);
-} else if (window.location.href.includes('theoneder.land/konkuk/my_page')) {
-  console.log('마이 페이지 감지됨, 3초 후 자동 실행...');
-  setTimeout(() => {
-    executeCancelationCode();
-  }, 3000);
 }
 
 // API에서 출석 데이터 가져오는 함수
