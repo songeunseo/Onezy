@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const attendanceMessageElement = document.querySelector('.attendance-message');
     const currentMonthElement = document.querySelector('.current-month');
     const loadingElement = document.querySelector('.loading');
+    const spaceLinkCard = document.getElementById('space-link-card');
+
+    // 스페이스케어 링크 처리
+    if (spaceLinkCard) {
+      spaceLinkCard.addEventListener('click', function() {
+        console.log('스페이스케어 링크 클릭');
+        chrome.tabs.create({ url: 'https://space.theoneder.land/konkuk/main' });
+      });
+    }
 
     // 예약 화면 요소
     const reservationScreen = document.getElementById('reservation-screen');

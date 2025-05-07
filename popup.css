@@ -36,6 +36,89 @@ button.cancel:hover {
   transform: translateY(-1px) scale(1.02);
   box-shadow: 0 2px 4px rgba(234, 67, 53, 0.2);
 }
+.space-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  padding: 8px 0;
+  color: #0364ff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  border-top: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+.space-link:hover {
+  color: #0252d4;
+  background-color: #f0f7ff;
+}
+.space-link-button {
+  display: block;
+  text-align: center;
+  background-color: white;
+  color: #0364ff;
+  border: 1px solid #0364ff;
+  padding: 8px 0;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.space-link-button:hover {
+  background-color: #f0f7ff;
+  color: #0252d4;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(3, 100, 255, 0.1);
+}
+
+/* 스페이스케어 카드 스타일 */
+.space-link-card {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+.space-link-card:hover {
+  background-color: #f8fbff;
+  border-color: #0364ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(3, 100, 255, 0.1);
+}
+.space-link-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.space-link-icon {
+  font-size: 20px;
+  color: #0364ff;
+}
+.space-link-text {
+  display: flex;
+  flex-direction: column;
+}
+.space-link-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #424242;
+}
+.space-link-desc {
+  font-size: 12px;
+  color: #757575;
+  margin-top: 2px;
+}
+.space-link-arrow {
+  font-size: 18px;
+  color: #0364ff;
+  font-weight: bold;
+}
 
 /* 새로운 버튼 스타일 */
 #startReservation, #execute-reservation {
@@ -247,7 +330,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-style: italic;
 }
 .update-info {
-  margin-left: 8px;
+  margin-left: 3px;
   font-size: 0.7em;
   color: #666;
   font-weight: normal;
